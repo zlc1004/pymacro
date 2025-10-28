@@ -434,8 +434,8 @@ class MacroExecutor:
                         print(f"✓ Template '{image_path}' found at screenshot position {center_pos}")
                         print(f"✓ Adjusted for DPI scaling to logical position {adjusted_pos}, stored in ${var_name}")
                     else:
-                        # Failure: set status to 1
-                        self.parser.last_command_status = 1
+                        # Failure: set status to 0
+                        self.parser.last_command_status = 0
                         print(f"✗ Template '{image_path}' not found (threshold: {threshold_percent}%)")
                 else:
                     # Simulation mode
@@ -446,7 +446,7 @@ class MacroExecutor:
 
             except Exception as e:
                 print(f"Error in cv match: {e}")
-                self.parser.last_command_status = 1
+                self.parser.last_command_status = 0
         else:
             raise ValueError(f"Invalid cv match syntax: {command}")
 
