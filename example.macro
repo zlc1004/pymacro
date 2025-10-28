@@ -1,0 +1,44 @@
+var set $count 1
+
+checkpoint "checkpoint 1"
+
+mouse move 100,100
+
+mouse left click
+
+mouse right down
+mouse right up
+
+var increase $count 1
+
+# increase $count by 1 ($count now = 2)
+
+# im a comment
+
+sleep 1000 (ms)
+
+if ($count != 3)
+
+# python syntax but () required
+
+# if true here run next line
+
+goto "checkpoint 1"
+
+
+# when running ignore lines that start with  # or empty
+
+# "string" 1 is int. no float support
+# vars only int
+
+key down a
+key down shift
+key down space
+
+key up a
+key up shift
+key up space
+
+key press a
+
+key type "hello World"

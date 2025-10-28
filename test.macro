@@ -1,0 +1,40 @@
+# Simple test macro to validate basic functionality
+
+# Set up variables
+var set $x 10
+var set $y 20
+
+# Test mouse movement (safe coordinates)
+mouse move 500,300
+
+# Test variable operations
+var increase $x 5
+# $x should now be 15
+
+# Test conditional (should be true)
+if ($x == 15)
+mouse left click
+
+# Test keyboard commands
+key down shift
+key press a
+key up shift
+key type "test"
+
+# Test sleep
+sleep 500
+
+# Test checkpoint and goto with condition
+checkpoint "test_loop"
+var increase $y 10
+
+# Test condition that will eventually be false
+if ($y < 50)
+goto "test_loop"
+
+# Final message through variable check
+var set $done 1
+if ($done == 1)
+sleep 100
+
+# End of test macro
