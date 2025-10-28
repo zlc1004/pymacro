@@ -428,9 +428,9 @@ class MacroExecutor:
                         adjusted_y = int(center_pos[1] / scale_y)
                         adjusted_pos = (adjusted_x, adjusted_y)
 
-                        # Success: set position variable and status to 0
+                        # Success: set position variable and status to 1
                         self.parser.variables[var_name] = adjusted_pos
-                        self.parser.last_command_status = 0
+                        self.parser.last_command_status = 1
                         print(f"✓ Template '{image_path}' found at screenshot position {center_pos}")
                         print(f"✓ Adjusted for DPI scaling to logical position {adjusted_pos}, stored in ${var_name}")
                     else:
@@ -442,7 +442,7 @@ class MacroExecutor:
                     print(f"[SIMULATE] cv match '{image_path}' {threshold_percent}% -> ${var_name}")
                     # In simulation, assume success and set dummy position
                     self.parser.variables[var_name] = (500, 300)
-                    self.parser.last_command_status = 0
+                    self.parser.last_command_status = 1
 
             except Exception as e:
                 print(f"Error in cv match: {e}")
