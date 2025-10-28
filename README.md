@@ -45,6 +45,7 @@ chmod +x pymacro.py
 
 ### Variables
 - `var set $<name> <value>`: Set a variable to an integer value (name must start with $)
+- `var set $<name> (x,y)`: Set a variable to position coordinates
 - `var increase $<name> <value>`: Increase a variable by the specified amount
 
 Example:
@@ -52,10 +53,14 @@ Example:
 var set $count 1
 var increase $count 2
 # $count is now 3
+
+var set $target_pos (100,200)
+mouse move $target_pos
 ```
 
 ### Mouse Commands
 - `mouse move <x>,<y>`: Move mouse to coordinates
+- `mouse move $<pos>`: Move mouse to position stored in variable
 - `mouse left click`: Perform left mouse click
 - `mouse right click`: Perform right mouse click
 - `mouse left down`: Press and hold left mouse button
@@ -67,6 +72,8 @@ Example:
 ```
 mouse move 100,200
 mouse left click
+var set $target (300,400)
+mouse move $target
 mouse right down
 mouse right up
 ```
@@ -99,6 +106,22 @@ if ($count < 5)
 goto "start"
 ```
 
+### Computer Vision (Template Matching)
+- `cv match <image.png> <threshold>% $<pos>`: Find template image on screen and store center position
+  - `<image.png>`: Path to the template image file
+  - `<threshold>%`: Match confidence threshold (e.g., 80% means 80% similarity required)
+  - `$<pos>`: Variable to store the center position of found template
+  - After execution, special variable `$` contains 0 for success, 1 for failure
+
+Example:
+```
+var set $button_pos (0,0)
+cv match button.png 80% $button_pos
+if ($ == 0)
+mouse move $button_pos
+mouse left click
+```
+
 ### Timing
 - `sleep <milliseconds>`: Pause execution for specified time
 
@@ -128,10 +151,12 @@ var set $x 10  # This command sets $x to 10
 
 ## Supported Data Types
 
-- **Integers**: Variables can only store integer values
-- **Variable Names**: Must start with $ (e.g., $count, $123_aaa)
+- **Integers**: Variables can store integer values
+- **Positions**: Variables can store (x,y) coordinate pairs
+- **Variable Names**: Must start with $ (e.g., $count, $pos, $123_aaa)
 - **Strings**: Used for checkpoint names (must be quoted)
 - **Coordinates**: Mouse coordinates as comma-separated integers
+- **Status**: Special variable `$` contains last command status (0=success, 1=failure)
 
 ## Example Macro File
 

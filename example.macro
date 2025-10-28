@@ -2,7 +2,9 @@ var set $count 1
 
 checkpoint "checkpoint 1"
 
-mouse move 100,100
+example.macro# change: mouse move requires a pos object. direct pass or a var.
+
+mouse move (100,100)
 
 mouse left click
 
@@ -21,15 +23,16 @@ if ($count != 3)
 
 # python syntax but () required
 
-# if true here run next line
+# if true here run all lines untill next "end"
 
 goto "checkpoint 1"
-
+end
 
 # when running ignore lines that start with  # or empty
 
 # "string" 1 is int. no float support
-# vars only int
+
+# vars can be int or pos. pos will be (x,y) xy both int
 
 key down a
 key down shift
@@ -42,3 +45,21 @@ key up space
 key press a
 
 key type "hello World"
+
+# image finding
+
+var set $pos (0,0)
+
+cv match image.png 50% $pos
+
+# every command after execution, will set var $ to 0 or 1, 0 for success, 1 for fail.
+# cv match will find on the entire screen for location that match image.png.
+# only 50% need to match for success
+# if success, $ is 0 and $pos is center of the found image
+# for example, image.png is 100 by 100 and its found at 1000 1000
+# $pos will be 1050 1050
+
+if ($)
+mouse move $pos
+mouse click left
+end
