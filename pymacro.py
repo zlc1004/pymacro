@@ -1,28 +1,92 @@
 #!/usr/bin/env python3
 """
-PyMacro - A Python script that reads and executes macro files using pyautogui.
+PyMacro - Desktop Automation Script with Computer Vision Support
 
-Supports the following macro commands:
-- var set $<name> <value>: Set a variable to integer value (name must start with $)
-- var set $<name> (x,y): Set a variable to position coordinates
-- var increase $<name> <value>: Increase a variable by a value
-- checkpoint "<name>": Create a checkpoint for goto
-- goto "<name>": Jump to a checkpoint
-- mouse move <x>,<y>: Move mouse to coordinates
-- mouse move $<pos>: Move mouse to position stored in variable
-- mouse left click: Perform left mouse click
-- mouse right click: Perform right mouse click
-- mouse left down/up: Press/release left mouse button
-- mouse right down/up: Press/release right mouse button
-- key down <key>: Press and hold a key
-- key up <key>: Release a key
-- key press <key>: Press and release a key
-- key type "<text>": Type text string
-- sleep <ms>: Sleep for specified milliseconds
-- if (<condition>): Conditional execution (use $variables in conditions, $ for last command status)
-- cv match <image.png> <threshold>% $<pos>: Find template image on screen and store center position
-- end: Terminate macro execution
-- Comments: Lines starting with # are ignored
+A powerful Python automation tool that reads and executes macro files to automate
+mouse movements, keyboard input, and computer vision operations using pyautogui and OpenCV.
+
+DEPENDENCIES:
+    - pyautogui (mouse/keyboard automation)
+    - opencv-python (computer vision and image matching)
+    - screeninfo (monitor information and DPI scaling)
+    - numpy (image processing)
+
+USAGE:
+    python pymacro.py <macro_file> [options]
+
+    Options:
+        --verbose, -v    Enable verbose output showing all commands
+        --dry-run        Parse and display commands without executing
+        --simulate       Execute logic but skip actual pyautogui actions
+
+MACRO FILE FORMAT:
+    Text file with one command per line. Lines starting with # are comments.
+
+SUPPORTED COMMANDS:
+
+    Variable Management:
+        var set $<name> <value>         Set variable to integer value
+        var set $<name> (x,y)          Set variable to position coordinates
+        var increase $<name> <value>    Increase variable by specified amount
+
+    Control Flow:
+        checkpoint "<name>"            Create a named checkpoint for jumps
+        goto "<name>"                  Jump to a previously defined checkpoint
+        if (<condition>)               Conditional execution block
+        end                           End conditional block or terminate macro
+
+    Mouse Operations:
+        mouse move <x>,<y>             Move mouse to absolute coordinates
+        mouse move $<pos>              Move mouse to stored position variable
+        mouse left click               Perform left mouse button click
+        mouse right click              Perform right mouse button click
+        mouse left down/up             Press/release left mouse button
+        mouse right down/up            Press/release right mouse button
+
+    Keyboard Operations:
+        key down <key>                 Press and hold a key
+        key up <key>                   Release a previously pressed key
+        key press <key>                Press and immediately release a key
+        key type "<text>"              Type a text string
+
+    Computer Vision:
+        cv match <image.png> <threshold>% $<pos>
+                                      Find template image on screen with specified
+                                      confidence threshold and store center position
+                                      in variable. Sets $ status (1=found, 0=not found)
+
+    Utility:
+        sleep <ms>                     Pause execution for specified milliseconds
+        # <comment>                    Comment line (ignored during execution)
+
+CONDITIONAL EXECUTION:
+    Use variables in conditions with $ prefix. Special $ variable contains status
+    of last command (1=success, 0=failure). Example:
+        if ($found == 1)
+            mouse move $target_pos
+            mouse left click
+        end
+
+EXAMPLE MACRO FILE:
+    # Simple automation example
+    var set $x 100
+    var set $y 200
+    mouse move $x,$y
+    mouse left click
+    key type "Hello World"
+    sleep 1000
+
+SAFETY FEATURES:
+    - Failsafe: Move mouse to top-left corner to abort execution
+    - Ctrl+C interrupt support
+    - DPI scaling compensation for high-resolution displays
+    - Simulation mode for testing without actual automation
+
+AUTHORS:
+    PyMacro automation framework
+
+VERSION:
+    1.0.0
 """
 
 import pyautogui
